@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ai_assistant_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ai_assistant
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/main/resources/schema-mysql.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: ai_assistant_backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ai_assistant
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      LLM_PROVIDER: ${LLM_PROVIDER:-hybrid}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      FRONTEND_BASE_URL: http://localhost:3000
+    ports:
+      - "8080:8080"
+    networks:
+      - ai_network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: ai_assistant_frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - ai_network
+
+volumes:
+  mysql_data:
+
+networks:
+  ai_network:
+    driver: bridge

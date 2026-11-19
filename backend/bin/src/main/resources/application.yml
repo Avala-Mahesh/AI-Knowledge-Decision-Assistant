@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ai-knowledge-decision-assistant
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:mysql}
+  sql:
+    init:
+      mode: never
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:SuperSecretSecureKeyForAIAssistantApplicationWithAtLeast256BitsLong2024!}
+    expiration-ms: 86400000 # 24 hours
+  frontend:
+    base-url: ${FRONTEND_BASE_URL:http://localhost:3000}
+  llm:
+    provider: ${LLM_PROVIDER:hybrid} # 'ollama', 'openai', or 'hybrid'
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      model: ${OLLAMA_MODEL:llama3}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      model: ${OPENAI_MODEL:gpt-4o-mini}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method

@@ -1,0 +1,253 @@
+{
+  "info": {
+    "_postman_id": "896d74d7-04c1-4046-850d-5f217dc41213",
+    "name": "AI Knowledge & Decision Assistant API",
+    "description": "Comprehensive Postman test collection for the Multi-Tenant AI Knowledge & Decision Assistant with System 1 Deterministic Engine.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1", "type": "string" },
+    { "key": "tokenA", "value": "", "type": "string" },
+    { "key": "assistantTokenA", "value": "", "type": "string" },
+    { "key": "tokenB", "value": "", "type": "string" },
+    { "key": "assistantTokenB", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register Organization A (Apex University)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationName\": \"Apex University\",\n  \"fullName\": \"Apex Administrator\",\n  \"email\": \"admin@apex.edu\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login Organization A (Apex University)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('tokenA', jsonData.token);",
+                  "pm.collectionVariables.set('assistantTokenA', jsonData.assistantToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@apex.edu\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Register Organization B (Nexus Corp)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationName\": \"Nexus Corp\",\n  \"fullName\": \"Nexus HR Admin\",\n  \"email\": \"admin@nexuscorp.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login Organization B (Nexus Corp)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('tokenB', jsonData.token);",
+                  "pm.collectionVariables.set('assistantTokenB', jsonData.assistantToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@nexuscorp.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile (/auth/me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Knowledge Base & Documents",
+      "item": [
+        {
+          "name": "List Organization A Documents",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/documents", "host": ["{{baseUrl}}"], "path": ["documents"] }
+          }
+        },
+        {
+          "name": "List Organization B Documents",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenB}}" }],
+            "url": { "raw": "{{baseUrl}}/documents", "host": ["{{baseUrl}}"], "path": ["documents"] }
+          }
+        },
+        {
+          "name": "Upload PDF to Knowledge Base",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "sample-data/org1_apex_university/Apex_Scholarship_Rules_2024.pdf" }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/documents/upload", "host": ["{{baseUrl}}"], "path": ["documents", "upload"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Assistant & Embed Management",
+      "item": [
+        {
+          "name": "Get Assistant Config & Embed Code",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/assistant", "host": ["{{baseUrl}}"], "path": ["assistant"] }
+          }
+        },
+        {
+          "name": "Regenerate Assistant Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/assistant/regenerate-token", "host": ["{{baseUrl}}"], "path": ["assistant", "regenerate-token"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Organization Dashboard & Stats",
+      "item": [
+        {
+          "name": "Get Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/stats", "host": ["{{baseUrl}}"], "path": ["dashboard", "stats"] }
+          }
+        },
+        {
+          "name": "Get Recent Question Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{tokenA}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/recent-questions?limit=10", "host": ["{{baseUrl}}"], "path": ["dashboard", "recent-questions"], "query": [{ "key": "limit", "value": "10" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Public Visitor Assistant (No Auth Required)",
+      "item": [
+        {
+          "name": "Ask Question - Direct Information (Apex)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assistantToken\": \"{{assistantTokenA}}\",\n  \"question\": \"What is the application deadline for fall merit scholarships?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/public/ask", "host": ["{{baseUrl}}"], "path": ["public", "ask"] }
+          }
+        },
+        {
+          "name": "Ask Question - Multi-Condition Decision (System 1 Engine)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assistantToken\": \"{{assistantTokenA}}\",\n  \"question\": \"I am a 3rd year student with a 3.85 GPA and an existing athletic scholarship. Am I eligible for the Presidential Merit Award?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/public/ask", "host": ["{{baseUrl}}"], "path": ["public", "ask"] }
+          }
+        },
+        {
+          "name": "Ask Question - Nexus Corporate Expense Multi-Condition",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assistantToken\": \"{{assistantTokenB}}\",\n  \"question\": \"I have an expense for a flight of $1,200 booked 18 days in advance. Is this compliant and who must approve it?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/public/ask", "host": ["{{baseUrl}}"], "path": ["public", "ask"] }
+          }
+        },
+        {
+          "name": "Ask Question - Out of Scope / Unanswered",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assistantToken\": \"{{assistantTokenA}}\",\n  \"question\": \"What is the recipe for chocolate chip cookies?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/public/ask", "host": ["{{baseUrl}}"], "path": ["public", "ask"] }
+          }
+        },
+        {
+          "name": "Ask Question - Tenant Isolation Check (Apex queried about Nexus)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assistantToken\": \"{{assistantTokenA}}\",\n  \"question\": \"What is the advance booking rule for corporate domestic flights?\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/public/ask", "host": ["{{baseUrl}}"], "path": ["public", "ask"] }
+          }
+        },
+        {
+          "name": "Get Public Assistant Info",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/public/assistant-info/{{assistantTokenA}}", "host": ["{{baseUrl}}"], "path": ["public", "assistant-info", "{{assistantTokenA}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

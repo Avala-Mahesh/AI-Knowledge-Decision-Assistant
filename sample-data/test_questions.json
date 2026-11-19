@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "organization": "Apex University",
+    "type": "DIRECT_INFO",
+    "question": "What is the priority application deadline for fall term merit scholarships?",
+    "expectedBehavior": "Grounds answer in Apex_Scholarship_Rules_2024.pdf Page 3. States July 1st annually.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 2,
+    "organization": "Nexus Corp",
+    "type": "DIRECT_INFO",
+    "question": "What is the monthly internet reimbursement allowance for remote employees?",
+    "expectedBehavior": "Grounds answer in Nexus_Remote_Work_Guidelines.pdf Page 2. States $60.00 per month.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 3,
+    "organization": "Apex University",
+    "type": "POLICY",
+    "question": "Can academic merit awards be combined with athletic or sports scholarships?",
+    "expectedBehavior": "Grounds answer in Apex_Scholarship_Rules_2024.pdf Page 2. Confirms stacking is permitted under NCAA Section IV up to 100% tuition.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 4,
+    "organization": "Nexus Corp",
+    "type": "POLICY",
+    "question": "What is the corporate policy regarding economy class versus business class flights?",
+    "expectedBehavior": "Grounds answer in Nexus_Travel_Expense_Policy.pdf Page 1. Economy required for flights under 6 hours; Business permitted over 6 hours with VP approval.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 5,
+    "organization": "Apex University",
+    "type": "PROCEDURAL",
+    "question": "What are the step-by-step procedures to apply for an institutional scholarship?",
+    "expectedBehavior": "Grounds answer in Apex_Scholarship_Rules_2024.pdf Page 3. Details Step 1 (FAFSA), Step 2 (Portal Application), Step 3 (Transcripts), Step 4 (Decision).",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 6,
+    "organization": "Nexus Corp",
+    "type": "PROCEDURAL",
+    "question": "Within how many calendar days must an employee submit travel expenses?",
+    "expectedBehavior": "Grounds answer in Nexus_Travel_Expense_Policy.pdf Page 2. States 30 calendar days in Concur portal.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 7,
+    "organization": "Apex University",
+    "type": "MULTI_CONDITION_DECISION",
+    "question": "I am a 3rd year student with a 3.85 GPA and an existing partial athletic scholarship. Am I eligible for the Presidential Merit Award?",
+    "expectedBehavior": "Decomposes criteria: GPA=3.85, Year=3rd (Junior), Athletic=true. Executes Choice model (Tier 1 Presidential Merit), Boolean model (GPA >= 3.8 PASS, Year PASS, NCAA stacking PASS CONDITIONAL), Score model (95/100 HIGH CONFIDENCE). Returns structured verdict with citations.",
+    "system1ModelUsed": true
+  },
+  {
+    "id": 8,
+    "organization": "Nexus Corp",
+    "type": "MULTI_CONDITION_DECISION",
+    "question": "I have an expense for a flight of $1,200 booked 18 days in advance. Is this compliant and who must approve it?",
+    "expectedBehavior": "Decomposes criteria: Amount=1200, LeadTime=18 days. Executes Choice model (Tier 2 Standard Manager Approval), Boolean model (Lead time >= 14 days PASS), Score model (90/100 Compliance). Grounded in Nexus_Travel_Expense_Policy.pdf Page 1 & 2.",
+    "system1ModelUsed": true
+  },
+  {
+    "id": 9,
+    "organization": "Apex University",
+    "type": "COMPARISON",
+    "question": "How does the Presidential Merit Award compare to the Dean's Excellence Scholarship in terms of GPA requirements and award amounts?",
+    "expectedBehavior": "Compares Tier 1 ($12,000/yr, GPA >= 3.80) vs Tier 2 ($8,000/yr, GPA 3.50-3.79) from Apex_Scholarship_Rules_2024.pdf Page 1.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 10,
+    "organization": "Nexus Corp",
+    "type": "COMPARISON",
+    "question": "What is the difference between standard domestic per diem meal allowance versus high-cost metro areas?",
+    "expectedBehavior": "Compares standard ($75.00/day) vs high-cost metros NYC/SF/London ($100.00/day) from Nexus_Travel_Expense_Policy.pdf Page 3.",
+    "system1ModelUsed": false
+  },
+  {
+    "id": 11,
+    "organization": "Apex University",
+    "type": "OUT_OF_SCOPE",
+    "question": "What is the recipe for chocolate chip cookies?",
+    "expectedBehavior": "Classified as OUT_OF_SCOPE. System detects no matching chunks in Apex KB. Returns polite response indicating the knowledge base does not contain this information without hallucinating.",
+    "system1ModelUsed": true
+  },
+  {
+    "id": 12,
+    "organization": "Apex University",
+    "type": "TENANT_ISOLATION_CHECK",
+    "question": "What is the required lead time for booking corporate flights?",
+    "expectedBehavior": "Asked to Apex assistant about Nexus Corp policy. System confirms Apex KB does not contain corporate flight policies, demonstrating complete tenant isolation.",
+    "system1ModelUsed": false
+  }
+]

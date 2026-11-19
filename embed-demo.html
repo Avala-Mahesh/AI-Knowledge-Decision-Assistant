@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>External Web Page Demo - Embedded AI Assistant</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: white;
+      padding: 48px 0;
+      border-bottom: 4px solid #2563eb;
+    }
+    .assistant-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      background: white;
+    }
+    iframe {
+      width: 100%;
+      height: 650px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- External Website Navigation -->
+  <nav class="navbar navbar-dark bg-dark px-4 py-2 border-bottom border-secondary">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span class="navbar-brand fw-bold d-flex align-items-center gap-2">
+        <i class="bi bi-globe text-primary"></i>
+        <span>External Portal (Simulated Host Site)</span>
+      </span>
+      <span class="badge bg-secondary">Embed Verification Page</span>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <div class="hero-banner text-center">
+    <div class="container" style="max-width: 800px;">
+      <span className="badge bg-primary px-3 py-1 mb-2 rounded-pill small">Take-Home Assignment Demo</span>
+      <h1 class="fw-bold mt-2 mb-3">Embedded AI Knowledge &amp; Decision Assistant</h1>
+      <p class="text-light opacity-75">
+        This simulated external website demonstrates how any organization can seamlessly embed their customized, multi-tenant AI Assistant using either an <strong>iframe</strong> or a <strong>floating JavaScript widget</strong>.
+      </p>
+    </div>
+  </div>
+
+  <div class="container py-5" style="max-width: 1050px;">
+    <!-- Tenant Switcher Bar -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+      <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+        <i class="bi bi-sliders2 text-primary"></i> Switch Simulated Organization Tenant
+      </h5>
+      <div class="row g-3 align-items-center">
+        <div class="col-md-7">
+          <label class="form-label small fw-semibold text-muted">Assistant Token</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light"><i class="bi bi-key-fill"></i></span>
+            <input
+              type="text"
+              id="tokenInput"
+              class="form-control font-monospace"
+              placeholder="Enter or paste assistant token (e.g. ast_...)"
+              value="ast_orgA_demo_token"
+            />
+            <button class="btn btn-primary" onclick="loadAssistant()">
+              <i class="bi bi-arrow-repeat"></i> Load Assistant
+            </button>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label small fw-semibold text-muted">Quick Load Sample Organization:</label>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="setDemoOrg('Apex University')">
+              <i class="bi bi-mortarboard-fill me-1"></i> Apex University
+            </button>
+            <button class="btn btn-outline-success btn-sm flex-fill" onclick="setDemoOrg('Nexus Corp')">
+              <i class="bi bi-buildings-fill me-1"></i> Nexus Corp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Embedded iFrame Container -->
+    <div class="assistant-card mb-5">
+      <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <span class="p-1 bg-primary text-white rounded-circle fs-6 d-inline-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+            <i class="bi bi-window"></i>
+          </span>
+          <span class="fw-bold small text-dark" id="previewTitle">Inline iFrame Embed Preview</span>
+        </div>
+        <span class="badge bg-success-subtle text-success small" id="tokenBadge">
+          <i class="bi bi-check-circle-fill me-1"></i> Token Validated
+        </span>
+      </div>
+
+      <iframe id="assistantIframe" src="http://localhost:3000/chat/ast_orgA_demo_token"></iframe>
+    </div>
+
+    <!-- Embed Instructions Guide -->
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+          <h5 class="fw-bold mb-2">
+            <i class="bi bi-file-code-fill text-primary me-2"></i> How iFrame Embed Works
+          </h5>
+          <p class="text-muted small">
+            Place this simple snippet on any webpage, portal, or LMS. The assistant renders in an isolated sandbox, automatically fetching only the specified organization's knowledge base.
+          </p>
+          <pre class="bg-light p-3 rounded border small text-dark mb-0"><code>&lt;iframe
+  src="http://localhost:3000/chat/&lt;ORGANIZATION_TOKEN&gt;"
+  width="100%"
+  height="600"
+  frameborder="0"
+  style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);"&gt;
+&lt;/iframe&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+          <h5 class="fw-bold mb-2">
+            <i class="bi bi-chat-dots-fill text-success me-2"></i> Floating Bubble Widget
+          </h5>
+          <p class="text-muted small">
+            To provide a floating chat bubble in the bottom corner of your organization's website, simply include our standalone widget script tag:
+          </p>
+          <pre class="bg-light p-3 rounded border small text-dark mb-0"><code>&lt;!-- Include before &lt;/body&gt; --&gt;
+&lt;script
+  src="http://localhost:3000/embed.js"
+  data-assistant-token="&lt;ORGANIZATION_TOKEN&gt;"&gt;
+&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-top py-4 text-center text-muted small">
+    Take-Home Assignment: Multi-Tenant AI Knowledge &amp; Decision Assistant &copy; 2024
+  </footer>
+
+  <script>
+    function loadAssistant() {
+      const token = document.getElementById('tokenInput').value.trim();
+      if (!token) return;
+      const iframe = document.getElementById('assistantIframe');
+      iframe.src = `http://localhost:3000/chat/${token}`;
+      document.getElementById('previewTitle').innerText = `Embedded Assistant (Token: ${token.substring(0, 16)}...)`;
+    }
+
+    async function setDemoOrg(orgName) {
+      try {
+        // Query backend for tokens if active
+        const res = await fetch('http://localhost:8080/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: orgName.includes('Apex') ? 'admin@apex.edu' : 'admin@nexuscorp.com',
+            password: 'password123'
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('tokenInput').value = data.assistantToken;
+          loadAssistant();
+          return;
+        }
+      } catch (e) {
+        // Fallback demo tokens
+      }
+      const token = orgName.includes('Apex') ? 'ast_orgA_secret_token_123' : 'ast_orgB_secret_token_456';
+      document.getElementById('tokenInput').value = token;
+      loadAssistant();
+    }
+  </script>
+</body>
+</html>
